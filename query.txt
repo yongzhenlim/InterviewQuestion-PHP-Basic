@@ -1,0 +1,34 @@
+Question B
+a. update the employee with employee_no 1002 job to 4, with effective 2020-01-01.
+UPDATE employee_job_table ej
+INNER JOIN employee_profile_table e ON ej.employee_id = e.employee_id
+SET ej.job_id = 4, ej.effective_date = '2020-01-01'
+WHERE e.employee_no = 1002;
+
+Question B
+b. list out the employee name, employee no, effective date, job title.
+SELECT e.employee_name, e.employee_no, ej.effective_date, j.job_name AS job_title
+FROM employee_profile_table e
+INNER JOIN employee_job_table ej ON e.employee_id = ej.employee_id
+INNER JOIN job_profile_table j ON ej.job_id = j.job_id;
+
+
+Question B
+c. list out the employee name, employee no, latest job title
+SELECT e.employee_name, e.employee_no, j.job_name AS latest_job_title
+FROM employee_profile_table e
+INNER JOIN employee_job_table ej ON e.employee_id = ej.employee_id
+INNER JOIN job_profile_table j ON ej.job_id = j.job_id
+WHERE ej.effective_date = (
+    SELECT MAX(ej2.effective_date)
+    FROM employee_job_table ej2
+    WHERE ej2.employee_id = e.employee_id
+);
+
+
+Question B
+d. delete all employee with employee_no 1000 job title, with effective date of 2020-01-01
+DELETE ej
+FROM employee_job_table ej
+INNER JOIN employee_profile_table e ON ej.employee_id = e.employee_id
+WHERE e.employee_no = 1000 AND ej.effective_date = '2020-01-01';
